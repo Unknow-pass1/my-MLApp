@@ -1,388 +1,402 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Responsive Tab Website</title>
-
-  <style>
-    :root{
-      --bg1:#0b1220;
-      --bg2:#0e1a33;
-      --card: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.14);
-      --text: #eaf0ff;
-      --muted: rgba(234,240,255,0.75);
-      --primary:#4f8cff;
-      --primary2:#2f6bff;
-      --shadow: 0 18px 45px rgba(0,0,0,0.35);
-      --radius: 18px;
-    }
-
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Thai", sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 700px at 15% 10%, #183a8a55, transparent 60%),
-                  radial-gradient(900px 600px at 90% 20%, #3a1b8a55, transparent 55%),
-                  linear-gradient(180deg, var(--bg1), var(--bg2));
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:16px;
-    }
-
-    .app{
-      width:min(980px, 100%);
-      background: var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      backdrop-filter: blur(10px);
-    }
-
-    /* Header */
-    .header{
-      padding:18px 18px 10px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      border-bottom:1px solid var(--border);
-    }
-    .brand{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-    .brand h1{
-      margin:0;
-      font-size:18px;
-      letter-spacing:0.2px;
-    }
-    .brand p{
-      margin:0;
-      font-size:12.5px;
-      color:var(--muted);
-    }
-
-    /* Tabs */
-    .tabs{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
-    .tab-btn{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      color:var(--text);
-      padding:10px 14px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      transition: 0.2s ease;
-      user-select:none;
-      font-size:14px;
-    }
-    .tab-btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,0.25);
-    }
-    .tab-btn.active{
-      background: linear-gradient(135deg, var(--primary), var(--primary2));
-      border-color: transparent;
-      box-shadow: 0 10px 22px rgba(79,140,255,0.28);
-    }
-
-    /* Content area */
-    .content{
-      padding:18px;
-    }
-
-    /* Each page is centered */
-    .page{
-      display:none;
-      min-height: 55vh;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
-    .page.active{
-      display:flex;
-    }
-
-    .card{
-      width:min(680px, 100%);
-      background: rgba(255,255,255,0.06);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      padding:22px 18px;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
-    }
-
-    .title{
-      margin:0 0 8px;
-      font-size:22px;
-      letter-spacing:0.2px;
-    }
-    .desc{
-      margin:0 auto 16px;
-      color:var(--muted);
-      line-height:1.6;
-      font-size:14.5px;
-      max-width: 52ch;
-    }
-
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,0.14);
-      margin:16px 0;
-    }
-
-    /* Check page UI */
-    .check-wrap{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:14px;
-    }
-
-    .upload-label{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px 18px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:700;
-      border:1px solid rgba(255,255,255,0.18);
-      background: linear-gradient(135deg, var(--primary), var(--primary2));
-      box-shadow: 0 12px 26px rgba(79,140,255,0.25);
-      transition: 0.2s ease;
-      user-select:none;
-      min-width: 140px;
-    }
-    .upload-label:hover{ transform: translateY(-1px); }
-    .upload-label:active{ transform: translateY(0px); }
-
-    .result-box{
-      width:min(420px, 100%);
-      padding:14px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.18);
-      text-align:center;
-    }
-    #label-container{
-      font-size:18px;
-      font-weight:800;
-      letter-spacing:0.2px;
-    }
-    .hint{
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .footer{
-      padding:14px 18px 18px;
-      border-top:1px solid var(--border);
-      color:var(--muted);
-      font-size:12.5px;
-      text-align:center;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width:520px){
-      .header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .tabs{
-        justify-content:flex-start;
-      }
-      .title{ font-size:20px; }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="app">
-    <div class="header">
-      <div class="brand">
-        <h1>Tab Menu Website</h1>
-        <p>Home • Check • About Us (Responsive + ไฟล์เดียว)</p>
-      </div>
-
-      <div class="tabs" role="tablist" aria-label="Main Tabs">
-        <button class="tab-btn active" data-tab="home" role="tab" aria-selected="true">Home</button>
-        <button class="tab-btn" data-tab="check" role="tab" aria-selected="false">Check</button>
-        <button class="tab-btn" data-tab="about" role="tab" aria-selected="false">About Us</button>
-      </div>
-    </div>
-
-    <div class="content">
-      <!-- HOME -->
-      <section class="page active" id="home" role="tabpanel">
-        <div class="card">
-          <h2 class="title">Home</h2>
-          <p class="desc">
-            ยินดีต้อนรับสู่เว็บไซต์แบบแท็บเมนู (Tab Menu) ที่รองรับการแสดงผลแบบ Responsive
-            เนื้อหาทุกหน้าถูกจัดให้อยู่กึ่งกลางหน้าจอเพื่ออ่านง่ายบนมือถือและคอมพิวเตอร์
-          </p>
-          <div class="divider"></div>
-          <p class="desc" style="max-width:60ch;">
-            👉 ไปที่แท็บ <b>Check</b> เพื่ออัปโหลดรูปภาพและให้โมเดล Teachable Machine
-            ทำนายผล โดยจะแสดงเฉพาะคลาสที่มีความน่าจะเป็นสูงที่สุด
-          </p>
-        </div>
-      </section>
-
-      <!-- CHECK -->
-      <section class="page" id="check" role="tabpanel">
-        <div class="card">
-          <h2 class="title">Check</h2>
-          <p class="desc">
-            เลือกรูปภาพเพื่อให้โมเดลทำการทำนายผล (ไม่แสดงภาพที่อัปโหลด)
-            และแสดงเฉพาะผลลัพธ์ที่มีความน่าจะเป็นสูงที่สุด
-          </p>
-
-          <div class="check-wrap">
-            <!-- ปุ่มเลือกภาพ (ใช้ label) -->
-            <label class="upload-label" for="imageUpload">เลือกภาพ</label>
-            <input id="imageUpload" type="file" accept="image/*" style="display:none;" />
-
-            <!-- ไม่แสดงภาพ -->
-            <img id="previewImage" style="display:none;" alt="preview"/>
-
-            <div class="result-box">
-              <div id="label-container">กำลังโหลดโมเดล...</div>
-              <p class="hint">รองรับไฟล์ภาพ .jpg .png ฯลฯ</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ABOUT -->
-      <section class="page" id="about" role="tabpanel">
-        <div class="card">
-          <h2 class="title">About Us</h2>
-          <p class="desc">
-            เว็บไซต์ตัวอย่างนี้สร้างเพื่อการเรียนรู้การทำเว็บแบบหน้าเดียว (Single File)
-            พร้อมระบบแท็บเมนู และนำโมเดล Teachable Machine มาใช้งานด้วยการอัปโหลดรูปภาพ
-          </p>
-          <div class="divider"></div>
-          <p class="desc" style="max-width:60ch;">
-            จุดเด่น: โครงสร้างอ่านง่าย • Responsive • จัดกลางหน้าทุกแท็บ • ใช้งานได้จริง
-          </p>
-        </div>
-      </section>
-    </div>
-
-    <div class="footer">
-      © 2026 • Responsive Tab Menu Website (Single HTML File)
-    </div>
-  </div>
-
-  <!-- Tensorflow + Teachable Machine -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-
-  <script>
-    /* -----------------------------
-      TAB MENU (Single Page)
-    ------------------------------*/
-    const tabButtons = document.querySelectorAll(".tab-btn");
-    const pages = document.querySelectorAll(".page");
-
-    function openTab(tabId){
-      pages.forEach(p => p.classList.remove("active"));
-      tabButtons.forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected","false");
-      });
-
-      document.getElementById(tabId).classList.add("active");
-      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
-      if(btn){
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected","true");
-      }
-    }
-
-    tabButtons.forEach(btn=>{
-      btn.addEventListener("click", ()=> openTab(btn.dataset.tab));
-    });
-
-    /* -----------------------------
-      Teachable Machine (Upload Image)
-    ------------------------------*/
-    const URL = "https://teachablemachine.withgoogle.com/models/y-_D1UZZN/";
-
-    let model, maxPredictions;
-
-    const labelContainer = document.getElementById("label-container");
-    const imageUpload = document.getElementById("imageUpload");
-    const previewImage = document.getElementById("previewImage");
-
-    async function initModel(){
-      try{
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-
-        labelContainer.textContent = "โหลดโมเดลสำเร็จ ✓ กรุณาเลือกภาพ";
-      }catch(err){
-        console.error(err);
-        labelContainer.textContent = "โหลดโมเดลไม่สำเร็จ (ตรวจสอบอินเทอร์เน็ต/ลิงก์โมเดล)";
-      }
-    }
-
-    imageUpload.addEventListener("change", function(){
-      const file = this.files[0];
-      if(!file) return;
-
-      if(!model){
-        labelContainer.textContent = "โมเดลยังไม่พร้อม กรุณารอสักครู่...";
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(event){
-        previewImage.src = event.target.result;
-
-        previewImage.onload = async function(){
-          await predictBest(previewImage);
-        };
-      };
-
-      reader.readAsDataURL(file);
-
-      // ไม่ให้แสดงชื่อไฟล์หลังปุ่ม (รีเซ็ตค่า input)
-      this.value = "";
-    });
-
-    async function predictBest(imageElement){
-      const prediction = await model.predict(imageElement);
-
-      let best = prediction[0];
-      for(let i=1;i<prediction.length;i++){
-        if(prediction[i].probability > best.probability){
-          best = prediction[i];
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine Image Classifier</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-      }
 
-      labelContainer.textContent = `${best.className}: ${best.probability.toFixed(2)}`;
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
 
-    initModel();
-  </script>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-height: 400px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .content-center h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .content-center p {
+            color: #666;
+            line-height: 1.8;
+            max-width: 800px;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .upload-section {
+            margin: 30px 0;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .results-container {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .result-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .prediction-result {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .class-name {
+            color: #764ba2;
+            font-size: 1.3em;
+        }
+
+        .probability {
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .loading {
+            display: none;
+            color: #667eea;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .tab-button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+
+            .tab-content {
+                padding: 25px;
+            }
+
+            .content-center h2 {
+                font-size: 1.5em;
+            }
+
+            .content-center p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Teachable Machine</h1>
+            <p>Image Classification System</p>
+        </div>
+
+        <div class="tab-menu">
+            <button class="tab-button active" onclick="openTab('home')">Home</button>
+            <button class="tab-button" onclick="openTab('check')">Check</button>
+            <button class="tab-button" onclick="openTab('about')">About Us</button>
+        </div>
+
+        <!-- Home Tab -->
+        <div id="home" class="tab-content active">
+            <div class="content-center">
+                <h2>ยินดีต้อนรับ</h2>
+                <p>ระบบจำแนกภาพด้วย Machine Learning ที่ใช้เทคโนโลยี Teachable Machine จาก Google เพื่อช่วยในการวิเคราะห์และจำแนกประเภทของภาพได้อย่างรวดเร็วและแม่นยำ</p>
+                <p>ระบบของเราสามารถประมวลผลภาพได้หลายภาพพร้อมกัน และแสดงผลลัพธ์การทำนายพร้อมค่าความน่าจะเป็นในทันที</p>
+                <p>เริ่มต้นใช้งานได้ง่ายๆ เพียงไปที่แท็บ "Check" และอัปโหลดภาพของคุณ</p>
+            </div>
+        </div>
+
+        <!-- Check Tab -->
+        <div id="check" class="tab-content">
+            <div class="content-center">
+                <h2>ตรวจสอบภาพ</h2>
+                <p>อัปโหลดภาพของคุณเพื่อทำการจำแนกประเภท (สามารถเลือกได้หลายภาพพร้อมกัน)</p>
+                
+                <div class="upload-section">
+                    <input type="file" id="imageUpload" class="file-input" accept="image/*" multiple onchange="handleFiles(this.files)">
+                    <label for="imageUpload" class="upload-label">📁 เลือกภาพ</label>
+                </div>
+
+                <div class="loading" id="loading">🔄 กำลังประมวลผล...</div>
+                
+                <div id="results" class="results-container"></div>
+            </div>
+        </div>
+
+        <!-- About Us Tab -->
+        <div id="about" class="tab-content">
+            <div class="content-center">
+                <h2>เกี่ยวกับเรา</h2>
+                <p>เราคือทีมพัฒนาที่มุ่งเน้นการนำเทคโนโลยี Machine Learning และ Artificial Intelligence มาประยุกต์ใช้ในการแก้ปัญหาในชีวิตประจำวัน</p>
+                <p>ระบบนี้พัฒนาด้วย TensorFlow.js และ Teachable Machine ซึ่งเป็นเครื่องมือที่ช่วยให้การสร้างโมเดล Machine Learning เป็นเรื่องง่ายและเข้าถึงได้สำหรับทุกคน</p>
+                <p>เทคโนโลยีที่ใช้:</p>
+                <p>✓ TensorFlow.js - JavaScript library สำหรับ Machine Learning</p>
+                <p>✓ Teachable Machine - เครื่องมือสร้างโมเดลแบบไม่ต้องเขียนโค้ด</p>
+                <p>✓ HTML5 & CSS3 - สำหรับการออกแบบ responsive website</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Teachable Machine Model URL
+        const URL = "https://teachablemachine.withgoogle.com/models/y-_D1UZZN/";
+        let model, maxPredictions;
+
+        // Load the model when page loads
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            
+            try {
+                model = await tmImage.load(modelURL, metadataURL);
+                maxPredictions = model.getTotalClasses();
+                console.log("Model loaded successfully");
+            } catch (error) {
+                console.error("Error loading model:", error);
+                alert("ไม่สามารถโหลดโมเดลได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต");
+            }
+        }
+
+        // Load model on page load
+        loadModel();
+
+        // Tab switching function
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            const tabButtons = document.getElementsByClassName('tab-button');
+            
+            for (let content of tabContents) {
+                content.classList.remove('active');
+            }
+            
+            for (let button of tabButtons) {
+                button.classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Handle multiple file uploads
+        async function handleFiles(files) {
+            if (!model) {
+                alert("โมเดลยังไม่พร้อม กรุณารอสักครู่");
+                return;
+            }
+
+            if (files.length === 0) {
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const resultsContainer = document.getElementById('results');
+            
+            // Clear previous results
+            resultsContainer.innerHTML = '';
+            loading.classList.add('active');
+
+            // Process each file
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (!file.type.startsWith('image/')) {
+                    continue;
+                }
+
+                await processImage(file, i + 1);
+            }
+
+            loading.classList.remove('active');
+        }
+
+        // Process individual image
+        async function processImage(file, index) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                
+                reader.onload = async function(e) {
+                    const img = new Image();
+                    img.onload = async function() {
+                        // Create a canvas to draw the image
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+
+                        // Make prediction
+                        const prediction = await model.predict(canvas);
+                        
+                        // Find the class with highest probability
+                        let maxProb = 0;
+                        let maxClass = '';
+                        
+                        for (let i = 0; i < maxPredictions; i++) {
+                            if (prediction[i].probability > maxProb) {
+                                maxProb = prediction[i].probability;
+                                maxClass = prediction[i].className;
+                            }
+                        }
+
+                        // Display result
+                        displayResult(file.name, maxClass, maxProb, index);
+                        resolve();
+                    };
+                    img.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Display prediction result
+        function displayResult(fileName, className, probability, index) {
+            const resultsContainer = document.getElementById('results');
+            
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            
+            resultItem.innerHTML = `
+                <h3>ภาพที่ ${index}: ${fileName}</h3>
+                <div class="prediction-result">
+                    <span class="class-name">${className}</span>
+                    <span> : </span>
+                    <span class="probability">${(probability * 100).toFixed(2)}%</span>
+                </div>
+            `;
+            
+            resultsContainer.appendChild(resultItem);
+        }
+    </script>
 </body>
 </html>
