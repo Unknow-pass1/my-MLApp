@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive Tab Website</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0e1a33;
+      --card: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.14);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,0.75);
+      --primary:#4f8cff;
+      --primary2:#2f6bff;
+      --shadow: 0 18px 45px rgba(0,0,0,0.35);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans Thai", sans-serif;
+      color:var(--text);
+      background: radial-gradient(1200px 700px at 15% 10%, #183a8a55, transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, #3a1b8a55, transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+    }
+
+    .app{
+      width:min(980px, 100%);
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Header */
+    .header{
+      padding:18px 18px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid var(--border);
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:0.2px;
+    }
+    .brand p{
+      margin:0;
+      font-size:12.5px;
+      color:var(--muted);
+    }
+
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .tab-btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      transition: 0.2s ease;
+      user-select:none;
+      font-size:14px;
+    }
+    .tab-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.25);
+    }
+    .tab-btn.active{
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(79,140,255,0.28);
+    }
+
+    /* Content area */
+    .content{
+      padding:18px;
+    }
+
+    /* Each page is centered */
+    .page{
+      display:none;
+      min-height: 55vh;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+    .page.active{
+      display:flex;
+    }
+
+    .card{
+      width:min(680px, 100%);
+      background: rgba(255,255,255,0.06);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:22px 18px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    }
+
+    .title{
+      margin:0 0 8px;
+      font-size:22px;
+      letter-spacing:0.2px;
+    }
+    .desc{
+      margin:0 auto 16px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:14.5px;
+      max-width: 52ch;
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,0.14);
+      margin:16px 0;
+    }
+
+    /* Check page UI */
+    .check-wrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+
+    .upload-label{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 18px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,0.18);
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      box-shadow: 0 12px 26px rgba(79,140,255,0.25);
+      transition: 0.2s ease;
+      user-select:none;
+      min-width: 140px;
+    }
+    .upload-label:hover{ transform: translateY(-1px); }
+    .upload-label:active{ transform: translateY(0px); }
+
+    .result-box{
+      width:min(420px, 100%);
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.18);
+      text-align:center;
+    }
+    #label-container{
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:0.2px;
+    }
+    .hint{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .footer{
+      padding:14px 18px 18px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:12.5px;
+      text-align:center;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:520px){
+      .header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .tabs{
+        justify-content:flex-start;
+      }
+      .title{ font-size:20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="brand">
+        <h1>Tab Menu Website</h1>
+        <p>Home • Check • About Us (Responsive + ไฟล์เดียว)</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Main Tabs">
+        <button class="tab-btn active" data-tab="home" role="tab" aria-selected="true">Home</button>
+        <button class="tab-btn" data-tab="check" role="tab" aria-selected="false">Check</button>
+        <button class="tab-btn" data-tab="about" role="tab" aria-selected="false">About Us</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- HOME -->
+      <section class="page active" id="home" role="tabpanel">
+        <div class="card">
+          <h2 class="title">Home</h2>
+          <p class="desc">
+            ยินดีต้อนรับสู่เว็บไซต์แบบแท็บเมนู (Tab Menu) ที่รองรับการแสดงผลแบบ Responsive
+            เนื้อหาทุกหน้าถูกจัดให้อยู่กึ่งกลางหน้าจอเพื่ออ่านง่ายบนมือถือและคอมพิวเตอร์
+          </p>
+          <div class="divider"></div>
+          <p class="desc" style="max-width:60ch;">
+            👉 ไปที่แท็บ <b>Check</b> เพื่ออัปโหลดรูปภาพและให้โมเดล Teachable Machine
+            ทำนายผล โดยจะแสดงเฉพาะคลาสที่มีความน่าจะเป็นสูงที่สุด
+          </p>
+        </div>
+      </section>
+
+      <!-- CHECK -->
+      <section class="page" id="check" role="tabpanel">
+        <div class="card">
+          <h2 class="title">Check</h2>
+          <p class="desc">
+            เลือกรูปภาพเพื่อให้โมเดลทำการทำนายผล (ไม่แสดงภาพที่อัปโหลด)
+            และแสดงเฉพาะผลลัพธ์ที่มีความน่าจะเป็นสูงที่สุด
+          </p>
+
+          <div class="check-wrap">
+            <!-- ปุ่มเลือกภาพ (ใช้ label) -->
+            <label class="upload-label" for="imageUpload">เลือกภาพ</label>
+            <input id="imageUpload" type="file" accept="image/*" style="display:none;" />
+
+            <!-- ไม่แสดงภาพ -->
+            <img id="previewImage" style="display:none;" alt="preview"/>
+
+            <div class="result-box">
+              <div id="label-container">กำลังโหลดโมเดล...</div>
+              <p class="hint">รองรับไฟล์ภาพ .jpg .png ฯลฯ</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="page" id="about" role="tabpanel">
+        <div class="card">
+          <h2 class="title">About Us</h2>
+          <p class="desc">
+            เว็บไซต์ตัวอย่างนี้สร้างเพื่อการเรียนรู้การทำเว็บแบบหน้าเดียว (Single File)
+            พร้อมระบบแท็บเมนู และนำโมเดล Teachable Machine มาใช้งานด้วยการอัปโหลดรูปภาพ
+          </p>
+          <div class="divider"></div>
+          <p class="desc" style="max-width:60ch;">
+            จุดเด่น: โครงสร้างอ่านง่าย • Responsive • จัดกลางหน้าทุกแท็บ • ใช้งานได้จริง
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      © 2026 • Responsive Tab Menu Website (Single HTML File)
+    </div>
+  </div>
+
+  <!-- Tensorflow + Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+  <script>
+    /* -----------------------------
+      TAB MENU (Single Page)
+    ------------------------------*/
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const pages = document.querySelectorAll(".page");
+
+    function openTab(tabId){
+      pages.forEach(p => p.classList.remove("active"));
+      tabButtons.forEach(b => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected","false");
+      });
+
+      document.getElementById(tabId).classList.add("active");
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if(btn){
+        btn.classList.add("active");
+        btn.setAttribute("aria-selected","true");
+      }
+    }
+
+    tabButtons.forEach(btn=>{
+      btn.addEventListener("click", ()=> openTab(btn.dataset.tab));
+    });
+
+    /* -----------------------------
+      Teachable Machine (Upload Image)
+    ------------------------------*/
+    const URL = "https://teachablemachine.withgoogle.com/models/y-_D1UZZN/";
+
+    let model, maxPredictions;
+
+    const labelContainer = document.getElementById("label-container");
+    const imageUpload = document.getElementById("imageUpload");
+    const previewImage = document.getElementById("previewImage");
+
+    async function initModel(){
+      try{
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        labelContainer.textContent = "โหลดโมเดลสำเร็จ ✓ กรุณาเลือกภาพ";
+      }catch(err){
+        console.error(err);
+        labelContainer.textContent = "โหลดโมเดลไม่สำเร็จ (ตรวจสอบอินเทอร์เน็ต/ลิงก์โมเดล)";
+      }
+    }
+
+    imageUpload.addEventListener("change", function(){
+      const file = this.files[0];
+      if(!file) return;
+
+      if(!model){
+        labelContainer.textContent = "โมเดลยังไม่พร้อม กรุณารอสักครู่...";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event){
+        previewImage.src = event.target.result;
+
+        previewImage.onload = async function(){
+          await predictBest(previewImage);
+        };
+      };
+
+      reader.readAsDataURL(file);
+
+      // ไม่ให้แสดงชื่อไฟล์หลังปุ่ม (รีเซ็ตค่า input)
+      this.value = "";
+    });
+
+    async function predictBest(imageElement){
+      const prediction = await model.predict(imageElement);
+
+      let best = prediction[0];
+      for(let i=1;i<prediction.length;i++){
+        if(prediction[i].probability > best.probability){
+          best = prediction[i];
+        }
+      }
+
+      labelContainer.textContent = `${best.className}: ${best.probability.toFixed(2)}`;
+    }
+
+    initModel();
+  </script>
+</body>
+</html>
